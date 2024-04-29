@@ -1,6 +1,8 @@
 import api from "@/services/api";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials"
+import { prisma } from "./server/prisma";
+import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
 	secret: process.env.AUTH_SECRET,
@@ -13,14 +15,14 @@ export const authOptions: NextAuthOptions = {
 			},
 
 			async authorize(credentials, req) {
-				const response = await api.post('/auth/login', credentials);
+				const user = await prisma.user.findFirst({
+					where: {
+						email: credentials?.email
+					}
+				})
 
-				console.log(response.data)
-
-				const user = await response.data.user;
-
-				if (user && response.status === 200) {
-					return user;
+				if (user && await bcrypt.compare(credentials?.password || "", user.password)) {
+					return user
 				}
 
 				return null

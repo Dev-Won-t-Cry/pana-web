@@ -21,14 +21,12 @@ export default async function PrivateLayout({ children }: PrivateLayoutProps) {
   const session = await getServerSession(authOptions)
 
   if (session) {
-    redirect('/admin')
+    redirect('/quadros')
   }
 
   return (
-    <html lang="pt-br">
-      <body>
-        {children}
-      </body>
-    </html>
+    <>
+      {children}
+    </>
   )
 }

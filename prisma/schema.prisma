@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String    @id @default(auto()) @map("_id") @db.ObjectId
+  //
+  email                String    @unique
+  password             String
+  //
+  passwordResetToken   String?   @unique
+  passwordResetExpires DateTime?
+  //
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  //
+  name                 String
+  //
+  Quadro               Quadro?   @relation(fields: [quadroId], references: [id])
+  quadroId             String?   @db.ObjectId
+  //
+  Card                 Card?     @relation(fields: [cardId], references: [id])
+  cardId               String?   @db.ObjectId
+
+  @@map("users")
+}
+
+model Quadro {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  //
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  //
+  title     String
+  //
+  members   User[]
+  Card      Card[]
+
+  @@map("quadros")
+}
+
+model Card {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  //
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  //
+  title     String
+  //
+  quadro    Quadro   @relation(fields: [quadroId], references: [id])
+  quadroId  String   @db.ObjectId
+  //
+  members   User[]
+
+  @@map("cards")
+}

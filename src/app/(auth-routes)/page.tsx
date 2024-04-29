@@ -52,11 +52,11 @@ export default function Home() {
       return
     }
 
-    router.replace('/admin')
+    router.replace('/quadros')
   };
 
   return (
-    <main className="h-full w-full flex justify-center items-center bg-login-background">
+    <main className="flex flex-col min-h-full p-16 justify-center items-center bg-login-background">
       <div className="flex flex-col space-y-4">
         <div className="px-16 py-10 bg-login-box border-black border-2 shadow-2xl">
           <p className="text-8xl text-login-title text-center">PANA</p>
