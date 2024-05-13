@@ -16,7 +16,7 @@ export default async function Dashboard() {
       </div>
       <div className="grid grid-cols-4 gap-4 mt-4">
         {quadros?.map(quadro => (
-          <a href={`/quadros/${quadro.id}`}>
+          <a key={quadro.id} href={`/quadros/${quadro.id}`}>
             <div className="flex flex-col p-4 bg-white rounded-lg text-center">
               <p className="font-bold">{quadro.title}</p>
               <p>{quadro.user.name}</p>
