@@ -69,9 +69,12 @@
 @layer base {
   * {
     @apply border-border;
-    @apply font-inter
   }
   html, body {
     @apply w-full h-full;
+  }
+  @font-face {
+    font-family: 'Montserrat';
+    src: url(/fonts/Montserrat.ttf);
   }
 }

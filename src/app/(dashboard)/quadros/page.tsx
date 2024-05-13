@@ -1,67 +1,29 @@
-"use client";
+import { authOptions } from "@/app/authOptions";
+import { getServerSession } from "next-auth";
+import { AddFrame } from "./components/AddFrame";
+import { getFramesAction } from "@/app/_actions";
+import { Button } from "@/components/ui/button";
 
-import { UserPlus } from "lucide-react";
-import { useSession } from "next-auth/react"
-
-export default function Dashboard() {
-  const { data: session } = useSession()
+export default async function Dashboard() {
+  const session = await getServerSession(authOptions);
+  const quadros = await getFramesAction()
 
   return (
-    <>
-      <div className="flex flex-row justify-between items-center border-2 border-black rounded-full px-4 py-2 bg-white">
-        <p>ESTUDO</p>
-        <button className="flex flex-row space-x-2 bg-slate-700 text-white rounded-none p-2">
-          <UserPlus />
-          <p>
-            Compartilhar
-          </p>
-        </button>
+    <div className="flex flex-col">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Quadros</h1>
+        <AddFrame id={session?.user.id || ""} />
       </div>
-      <div className="flex flex-row space-x-4 items-start">
-        <div className="flex flex-col space-y-2 border-2 border-black rounded-3xl p-4 w-2/12 bg-white">
-          <div className="flex flex-row justify-between border-2 border-yellow-300 rounded-full p-2">
-            <p>MER</p>
-            <p>...</p>
-          </div>
-          <div className="border-2 border-black rounded-full p-2 bg-green-200">
-            <p>Diego</p>
-          </div>
-          <div className="border-2 border-black rounded-full p-2 bg-yellow-200">
-            <p>Thales</p>
-          </div>
-          <div className="border-2 border-black rounded-full p-2 bg-green-200">
-            <p>Kauê</p>
-          </div>
-          <div>
-            <p>+ ADICIONAR CARTÃO</p>
-          </div>
-        </div>
-
-        <div className="flex flex-col space-y-2 border-2 border-black rounded-3xl p-4 w-2/12 bg-white">
-          <div className="flex flex-row justify-between border-2 border-red-300 rounded-full p-2">
-            <p>DIAG - CLASSE</p>
-            <p>...</p>
-          </div>
-          <div className="border-2 border-black rounded-full p-2 bg-red-200">
-            <p>Diego</p>
-          </div>
-          <div className="border-2 border-black rounded-full p-2 bg-red-200">
-            <p>Thales</p>
-          </div>
-          <div className="border-2 border-black rounded-full p-2 bg-red-200">
-            <p>Kauê</p>
-          </div>
-          <div className="border-2 border-black rounded-full p-2 bg-red-200">
-            <p>Gustavo</p>
-          </div>
-          <div className="border-2 border-black rounded-full p-2 bg-red-200">
-            <p>Lucas</p>
-          </div>
-          <div>
-            <p>+ ADICIONAR CARTÃO</p>
-          </div>
-        </div>
+      <div className="grid grid-cols-4 gap-4 mt-4">
+        {quadros?.map(quadro => (
+          <a href={`/quadros/${quadro.id}`}>
+            <div className="flex flex-col p-4 bg-white rounded-lg text-center">
+              <p className="font-bold">{quadro.title}</p>
+              <p>{quadro.user.name}</p>
+            </div>
+          </a>
+        ))}
       </div>
-    </>
+    </div>
   )
 }

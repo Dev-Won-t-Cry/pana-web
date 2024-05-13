@@ -16,11 +16,14 @@ export default async function PrivateLayout({ children }: PrivateLayoutProps) {
   }
 
   return (
-    <div className="w-full h-screen flex flex-row items-center justify-center space-x-16">
-      <div className="flex flex-col space-y-8 w-2/12">
+    <div className="w-full h-screen flex flex-row items-start justify-center space-x-16 pt-32">
+      <div className="flex flex-col space-y-8 min-w-2/12">
+        <div className="px-16 py-10 bg-black/30 rounded-5xl">
+          <p className="text-8xl text-login-title text-center">PANA</p>
+        </div>
         <Nav />
       </div>
-      <div className="flex flex-col space-y-8 w-8/12 h-5/6 bg-login-box border-2 border-black rounded-3xl p-8">
+      <div className="flex flex-col space-y-8 w-8/12 min-h-[80%] bg-black/30 rounded-5xl p-8">
         {children}
       </div>
     </div>

@@ -2,11 +2,8 @@ import { getServerSession } from "next-auth";
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import { authOptions } from "../authOptions";
-
-const inter = Inter({ subsets: ["latin"] });
 
 interface PrivateLayoutProps {
   children: ReactNode

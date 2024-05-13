@@ -20,12 +20,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { FaFacebook, FaGoogle, FaSpinner } from "react-icons/fa";
 import { Switch } from "@/components/ui/switch"
+import { useMutation, useQuery } from "react-query";
 
 export default function Home() {
   const router = useRouter();
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -36,39 +37,43 @@ export default function Home() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+  const login = async (values: any) => {
     const result = await signIn('credentials', {
       email: values.email,
       password: values.password,
       redirect: false
     })
 
-    if (result?.error) {
-      toast({
-        title: 'Erro',
-        description: 'Falha ao logar',
-        variant: 'destructive',
-      })
-      return
-    }
+    if (result?.error) return Promise.reject(result.error)
 
-    router.replace('/quadros')
-  };
+    return result
+  }
+
+  const onSubmit = useMutation(login, {
+    onError: () => {
+      toast({
+        title: "Erro ao fazer login",
+        description: "Verifique suas credenciais e tente novamente",
+        variant: "destructive",
+      });
+    },
+    onSuccess: () => {
+      router.replace('/quadros')
+    }
+  });
 
   return (
-    <main className="flex flex-col min-h-full p-16 justify-center items-center bg-login-background">
+    <main className="flex flex-col min-h-full p-16 justify-center items-center">
       <div className="flex flex-col space-y-4">
-        <div className="px-16 py-10 bg-login-box border-black border-2 shadow-2xl">
+        <div className="px-16 py-10 bg-black/30 rounded-5xl">
           <p className="text-8xl text-login-title text-center">PANA</p>
         </div>
-        <div className="py-10 bg-login-box border-black border-2 justify-center items-center flex flex-col">
+        <div className="py-10 bg-black/30 rounded-5xl justify-center items-center flex flex-col">
           <div className="flex flex-col space-y-4 w-80">
             <Button className="bg-white hover:bg-gray-400 text-black rounded-full border-2 border-black">
-              <FaGoogle className="w-6 h-6" />
               <span className="w-9/12">Continuar com Google</span>
             </Button>
             <Button className="bg-white hover:bg-gray-400 text-black rounded-full border-2 border-black">
-              <FaFacebook className="w-6 h-6" />
               <span className="w-9/12">Continuar com Facebook</span>
             </Button>
             <Button className="flex flex-row space-x-2 bg-white hover:bg-gray-400 text-black rounded-full border-2 border-black">
@@ -78,10 +83,10 @@ export default function Home() {
 
           <div className="bg-black my-8 w-11/12 h-0.5"></div>
 
-          <div className="px-16">
+          <div className="px-16 text-white">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-80">
-                <div>
+              <form onSubmit={form.handleSubmit((values) => onSubmit.mutate(values))} className="space-y-4 w-80">
+                <div className="flex flex-col space-y-4">
                   <FormField
                     control={form.control}
                     name="email"
@@ -89,7 +94,7 @@ export default function Home() {
                       <FormItem>
                         <FormLabel>E-mail ou nome de usuário</FormLabel>
                         <FormControl>
-                          <Input {...field} className="bg-white border-2 border-black rounded-full" />
+                          <Input {...field} className="bg-white border-2 border-black rounded-full text-black" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -102,7 +107,7 @@ export default function Home() {
                       <FormItem>
                         <FormLabel>Senha</FormLabel>
                         <FormControl>
-                          <Input {...field} type="password" className="bg-white border-2 border-black rounded-full" />
+                          <Input {...field} type="password" className="bg-white border-2 border-black rounded-full text-black" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -130,9 +135,11 @@ export default function Home() {
                 <div className="flex flex-col justify-center items-center space-y-3">
                   <Button
                     type="submit"
-                    className="bg-login-button rounded-full border-2 border-black uppercase text-black text-lg px-8 py-6 hover:bg-login-buttonHover"
+                    className="bg-login-button rounded-full border-2 border-black uppercase text-white text-lg px-8 py-6 hover:bg-login-buttonHover"
                   >
-                    Entrar
+                    {onSubmit.isLoading ? (
+                      <FaSpinner className="animate-spin h-5 w-5" />
+                    ) : "Entrar"}
                   </Button>
                   <Link href="forgot" className="underline text-sm">
                     Esqueceu sua senha?

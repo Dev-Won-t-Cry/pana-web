@@ -17,22 +17,25 @@ const config = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      sans: ["Montserrat"],
+    },
     extend: {
-      fontFamily: {
-        inter: ["Inter", "sans-serif"],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#F1FFFF",
+        background: "#FFF",
         foreground: "hsl(var(--foreground))",
         login: {
-          background: "#F1FFFF",
-          box: "#F1FFF0",
+          background: "#FFF",
+          box: "#FFF",
           title: "#970005",
           button: "#D22E2F",
           buttonHover: "#C43D41",
+        },
+        dashboard: {
+          primary: "#C12928"
         },
         primary: {
           DEFAULT: "#FFF",
@@ -67,6 +70,7 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        '5xl': '3.5rem',
       },
       keyframes: {
         "accordion-down": {

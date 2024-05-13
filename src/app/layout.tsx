@@ -1,7 +1,7 @@
 import NextAuthSessionProvider from '@/providers/sessionProvider'
-import './globals.css'
-import type { Metadata } from 'next'
+import '../styles/globals.css'
 import { Toaster } from '@/components/ui/toaster'
+import Providers from './providers'
 
 export default function RootLayout({
   children,
@@ -18,9 +18,16 @@ export default function RootLayout({
           sizes="<generated>"
         />
       </head>
-      <body className='w-full h-full'>
-        <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
-        <Toaster />
+      <body
+        className='w-full h-full'
+        style={{
+          backgroundImage: 'url(/static/images/background.png)',
+          backgroundSize: 'cover',
+        }}
+      >
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )
