@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { authOptions } from "../authOptions";
 import Nav from "@/components/Nav";
+import Image from "next/image";
 
 interface PrivateLayoutProps {
   children: ReactNode
@@ -16,10 +17,10 @@ export default async function PrivateLayout({ children }: PrivateLayoutProps) {
   }
 
   return (
-    <div className="w-full h-screen flex flex-row items-start justify-center space-x-16 pt-32">
-      <div className="flex flex-col space-y-8 min-w-2/12">
-        <div className="px-16 py-10 bg-black/30 rounded-5xl">
-          <p className="text-8xl text-login-title text-center">PANA</p>
+    <div className="w-full h-screen flex flex-row items-start justify-center space-x-16 p-[2%]">
+      <div className="flex flex-col space-y-8 w-2/12">
+        <div className="px-16 py-10 bg-black/30 rounded-5xl flex justify-center items-center">
+          <Image src="/static/images/pana.png" width={300} height={300} alt="" />
         </div>
         <Nav />
       </div>

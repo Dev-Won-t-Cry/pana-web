@@ -1,6 +1,8 @@
 import { getListsAction } from "@/app/_actions";
-import { AddList } from "../components/AddList";
-import { AddCard } from "../components/AddCard";
+import { ListAdd } from "../components/List/ListAdd";
+import { ListDropdown } from "../components/List/ListDropdown";
+import { CardAdd } from "../components/Card/CardAdd";
+import { CardDropdown } from "../components/Card/CardDropdown";
 
 export default async function Quadro({ params }: { params: { id: string } }) {
   const listas = await getListsAction(params.id)
@@ -9,7 +11,7 @@ export default async function Quadro({ params }: { params: { id: string } }) {
     <div className="flex flex-col space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold"></h1>
-        <AddList id={params.id} length={listas?.length || 0} />
+        <ListAdd id={params.id} length={listas?.length || 0} />
       </div>
       <div className="grid grid-cols-4 gap-4 items-start">
         {
@@ -21,25 +23,17 @@ export default async function Quadro({ params }: { params: { id: string } }) {
 
             return (
               <div key={lista.id} className="flex flex-col space-y-2 border-2 border-black rounded-3xl p-4 bg-white">
-                <div className={`flex flex-row justify-between border-2 border-black rounded-full p-2 ${listStatus}`}>
-                  <p>{lista.title}</p>
-                  <p>...</p>
+                <div className={`flex flex-row justify-between border-2 border-black rounded-full py-2 px-4 items-center ${listStatus}`}>
+                  <p>
+                    {lista.title.length > 10 ? lista.title.slice(0, 10) + "..." : lista.title}
+                  </p>
+                  <ListDropdown list={lista} />
                 </div>
                 {
-                  lista.cards.map((card) => {
-                    const cardStatus = card.status === "Done" ? "bg-green-200"
-                      : card.status === "InProgress" ? "bg-yellow-200"
-                        : "bg-red-200"
-
-                    return (
-                      <div key={card.id} className={`border-2 border-black rounded-full p-2 ${cardStatus}`}>
-                        <p>{card.title}</p>
-                      </div>
-                    )
-                  })
+                  lista.cards.map((card) => <CardDropdown key={card.id} card={card} />)
                 }
-                <div>
-                  <AddCard id={lista.id} />
+                <div className="flex justify-center items-center">
+                  <CardAdd id={lista.id} />
                 </div>
               </div>
             )

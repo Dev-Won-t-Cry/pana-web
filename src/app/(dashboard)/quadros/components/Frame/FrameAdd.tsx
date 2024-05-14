@@ -24,25 +24,25 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { FaSpinner } from "react-icons/fa"
 
-export const AddFrameSchema = z.object({
+export const Schema = z.object({
   title: z.string().min(1).max(255),
 })
 
-type AddFrameProps = {
+type Props = {
   id: string
 }
 
-export const AddFrame = ({ id }: AddFrameProps) => {
+export const FrameAdd = ({ id }: Props) => {
   const router = useRouter()
-  const form = useForm<z.infer<typeof AddFrameSchema>>({
-    resolver: zodResolver(AddFrameSchema),
+  const form = useForm<z.infer<typeof Schema>>({
+    resolver: zodResolver(Schema),
     defaultValues: {
       title: "",
     },
   })
   const [loading, setLoading] = useState(false)
 
-  const onSubmit = async (data: z.infer<typeof AddFrameSchema>) => {
+  const onSubmit = async (data: z.infer<typeof Schema>) => {
     setLoading(true)
     const quadro = await createFrameAction(data.title, id)
 
@@ -75,7 +75,7 @@ export const AddFrame = ({ id }: AddFrameProps) => {
             <Button type="submit">
               {loading ? (
                 <FaSpinner className="animate-spin h-5 w-5" />
-              ) : "Entrar"}
+              ) : "Adicionar"}
             </Button>
           </form>
         </Form>

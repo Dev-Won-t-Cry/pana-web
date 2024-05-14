@@ -1,4 +1,6 @@
 import { prisma } from "@/app/server/prisma";
+import { UpdateListType } from "@/types/list";
+import { List } from "@prisma/client";
 
 export async function getLists(frameId: string) {
   try {
@@ -7,7 +9,7 @@ export async function getLists(frameId: string) {
         frameId
       },
       include: {
-        cards: true
+        cards: true,
       }
     })
     return lists
@@ -23,6 +25,33 @@ export async function createList(title: string, frameId: string, order: number) 
         title,
         frameId,
         order
+      }
+    })
+    return list
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function updateList(listId: string, data: UpdateListType) {
+  try {
+    const list = await prisma.list.update({
+      data,
+      where: {
+        id: listId
+      }
+    })
+    return list
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function deleteList(listId: string) {
+  try {
+    const list = await prisma.list.delete({
+      where: {
+        id: listId
       }
     })
     return list

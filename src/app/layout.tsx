@@ -23,6 +23,8 @@ export default function RootLayout({
         style={{
           backgroundImage: 'url(/static/images/background.png)',
           backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
         }}
       >
         <Providers>

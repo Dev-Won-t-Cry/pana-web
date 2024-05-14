@@ -1,8 +1,8 @@
 import { authOptions } from "@/app/authOptions";
 import { getServerSession } from "next-auth";
-import { AddFrame } from "./components/AddFrame";
 import { getFramesAction } from "@/app/_actions";
 import { Button } from "@/components/ui/button";
+import { FrameAdd } from "./components/Frame/FrameAdd";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -12,7 +12,7 @@ export default async function Dashboard() {
     <div className="flex flex-col">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Quadros</h1>
-        <AddFrame id={session?.user.id || ""} />
+        <FrameAdd id={session?.user.id || ""} />
       </div>
       <div className="grid grid-cols-4 gap-4 mt-4">
         {quadros?.map(quadro => (

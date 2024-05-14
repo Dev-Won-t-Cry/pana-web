@@ -19,34 +19,45 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { createFrameAction, createListAction } from "@/app/_actions"
+import { createFrameAction, createListAction, updateCardAction, updateListAction } from "@/app/_actions"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { FaSpinner } from "react-icons/fa"
+import { updateList } from "@/lib/list"
+import { Card } from "@prisma/client"
+import { UpdateListType } from "@/types/list"
+import { UpdateCardType } from "@/types/card"
 
-export const AddListSchema = z.object({
+export const Schema = z.object({
   title: z.string().min(1).max(255),
 })
 
-type AddListProps = {
-  id: string
-  length: number
+type Props = {
+  card: Card
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export const AddList = ({ id, length }: AddListProps) => {
+export const CardRename = ({ card, open, setOpen }: Props) => {
   const router = useRouter()
-  const form = useForm<z.infer<typeof AddListSchema>>({
-    resolver: zodResolver(AddListSchema),
+  const form = useForm<z.infer<typeof Schema>>({
+    resolver: zodResolver(Schema),
     defaultValues: {
       title: "",
     },
   })
-  const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const onSubmit = async (data: z.infer<typeof AddListSchema>) => {
+  const onSubmit = async (data: z.infer<typeof Schema>) => {
     setLoading(true)
-    await createListAction(data.title, id, length)
+
+    const values: UpdateCardType = {
+      title: data.title,
+      order: card.order,
+      status: card.status
+    }
+
+    await updateCardAction(card.id, values)
 
     setLoading(false)
     router.refresh()
@@ -55,10 +66,6 @@ export const AddList = ({ id, length }: AddListProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-400">
-        <UserPlus size={24} />
-        <span className="uppercase">Adicionar cartão</span>
-      </DialogTrigger>
       <DialogContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -78,7 +85,7 @@ export const AddList = ({ id, length }: AddListProps) => {
             <Button type="submit">
               {loading ? (
                 <FaSpinner className="animate-spin h-5 w-5" />
-              ) : "Entrar"}
+              ) : "Salvar"}
             </Button>
           </form>
         </Form>

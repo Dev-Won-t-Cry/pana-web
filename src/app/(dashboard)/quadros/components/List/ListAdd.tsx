@@ -19,23 +19,24 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { createCardAction, createFrameAction } from "@/app/_actions"
+import { createFrameAction, createListAction } from "@/app/_actions"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { FaSpinner } from "react-icons/fa"
 
-export const AddCardSchema = z.object({
+export const Schema = z.object({
   title: z.string().min(1).max(255),
 })
 
-type AddCardProps = {
+type Props = {
   id: string
+  length: number
 }
 
-export const AddCard = ({ id }: AddCardProps) => {
+export const ListAdd = ({ id, length }: Props) => {
   const router = useRouter()
-  const form = useForm<z.infer<typeof AddCardSchema>>({
-    resolver: zodResolver(AddCardSchema),
+  const form = useForm<z.infer<typeof Schema>>({
+    resolver: zodResolver(Schema),
     defaultValues: {
       title: "",
     },
@@ -43,9 +44,9 @@ export const AddCard = ({ id }: AddCardProps) => {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const onSubmit = async (data: z.infer<typeof AddCardSchema>) => {
+  const onSubmit = async (data: z.infer<typeof Schema>) => {
     setLoading(true)
-    await createCardAction(data.title, id, length)
+    await createListAction(data.title, id, length)
 
     setLoading(false)
     router.refresh()
@@ -54,9 +55,9 @@ export const AddCard = ({ id }: AddCardProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="flex items-center gap-2 px-4 py-2 text-red-700 rounded-md">
+      <DialogTrigger className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-400">
         <UserPlus size={24} />
-        <span className="uppercase">Adicionar um cartão</span>
+        <span>Nova Lista</span>
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
@@ -77,7 +78,7 @@ export const AddCard = ({ id }: AddCardProps) => {
             <Button type="submit">
               {loading ? (
                 <FaSpinner className="animate-spin h-5 w-5" />
-              ) : "Entrar"}
+              ) : "Adicionar"}
             </Button>
           </form>
         </Form>
