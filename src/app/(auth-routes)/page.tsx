@@ -23,6 +23,7 @@ import { z } from "zod";
 import { FaFacebook, FaGoogle, FaSpinner } from "react-icons/fa";
 import { Switch } from "@/components/ui/switch"
 import { useMutation, useQuery } from "react-query";
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function Home() {
     <main className="flex flex-col min-h-full p-16 justify-center items-center">
       <div className="flex flex-col space-y-4">
         <div className="px-16 py-10 bg-black/30 rounded-5xl">
-          <p className="text-8xl text-login-title text-center">PANA</p>
+          <Image src="/static/images/pana.png" width={300} height={300} alt="" />
         </div>
         <div className="py-10 bg-black/30 rounded-5xl justify-center items-center flex flex-col">
           <div className="flex flex-col space-y-4 w-80">
