@@ -1,16 +1,15 @@
-import { getServerSession } from "next-auth";
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
-import { authOptions } from "../authOptions";
 import Nav from "@/components/Nav";
 import Image from "next/image";
+import { auth } from "@/auth";
 
 interface PrivateLayoutProps {
   children: ReactNode
 }
 
 export default async function PrivateLayout({ children }: PrivateLayoutProps) {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
 
   if (!session) {
     redirect('/')

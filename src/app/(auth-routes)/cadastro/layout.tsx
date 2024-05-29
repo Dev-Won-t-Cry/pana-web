@@ -9,8 +9,8 @@ interface PrivateLayoutProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Login | Pana',
-  description: 'Login | Pana',
+  title: 'Cadastro | Pana',
+  description: 'Cadastro | Pana',
 }
 
 export default async function PrivateLayout({ children }: PrivateLayoutProps) {

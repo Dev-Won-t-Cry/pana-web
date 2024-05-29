@@ -3,14 +3,15 @@
 import { createCard, deleteCard, getCards, updateCard } from "@/lib/card"
 import { createFrame, getFrames } from "@/lib/frame"
 import { createList, deleteList, getLists, updateList } from "@/lib/list"
+import { signUp } from "@/lib/signUp"
 import { UpdateCardType } from "@/types/card"
 import { UpdateListType } from "@/types/list"
 import { List } from "@prisma/client"
 
 // Frames
 
-export async function getFramesAction() {
-  return await getFrames()
+export async function getFramesAction(userId: string) {
+  return await getFrames(userId)
 }
 
 export async function createFrameAction(title: string, userId: string) {
@@ -19,8 +20,8 @@ export async function createFrameAction(title: string, userId: string) {
 
 // Lists
 
-export async function getListsAction(id: string) {
-  return await getLists(id)
+export async function getListsAction(frameId: string) {
+  return await getLists(frameId)
 }
 
 export async function createListAction(title: string, frameId: string, order: number) {
@@ -51,4 +52,10 @@ export async function updateCardAction(cardId: string, data: UpdateCardType) {
 
 export async function deleteCardAction(cardId: string) {
   return await deleteCard(cardId)
+}
+
+// Login
+
+export async function signUpAction(name: string, email: string, password: string) {
+  return await signUp(name, email, password)
 }

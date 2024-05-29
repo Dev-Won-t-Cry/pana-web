@@ -1,8 +1,11 @@
 import { prisma } from "@/app/server/prisma";
 
-export async function getFrames() {
+export async function getFrames(userId: string) {
   try {
     const frames = await prisma.frame.findMany({
+      where: {
+        userId
+      },
       include: {
         user: true
       }
